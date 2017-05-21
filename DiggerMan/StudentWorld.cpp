@@ -4,7 +4,7 @@ using namespace std;
 //custom constants added by Jeff A
 const double TOTAL_HP = 10;
 const int DB_VALUE = 200; // default path values for Dirt and Boulder
-
+ 
 GameWorld* createStudentWorld(string assetDir)
 {
 	return new StudentWorld(assetDir);
