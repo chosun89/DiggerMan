@@ -66,12 +66,11 @@ private:
 class DistGameObj : public Actor
 {
 private:
-	int Ticks;
+	int Ticks = 0;
 public:
 	DistGameObj(int imageID, int startX, int startY, Direction dir, double size, unsigned int depth, StateType state)
 		: Actor(imageID, startX, startY, dir, size, depth, state) {};
 
-	// 
 	void incTicks() { Ticks++; }
 	void decTicks() { Ticks--; }
 	int getTicks() { return Ticks; }
@@ -85,7 +84,6 @@ private:
 public:
 	Boulder(int startX, int startY) : DistGameObj(IMID_BOULDER, startX, startY, down, 1.0, 1, stable)
 	{
-		setTicks(0);
 		setVisible(true);
 	}
 
@@ -93,24 +91,17 @@ public:
 };
 
 class Nugget : public DistGameObj {
-private:
-	int Ticks;
 public:
 	Nugget(int startX, int startY, StateType s)
-		: DistGameObj(IMID_GOLD, startX, startY, right, 1.0, 2, s), Ticks(0)
+		: DistGameObj(IMID_GOLD, startX, startY, right, 1.0, 2, s)
 	{
 		setVisible(false);
 	}
 
-	int getTicks() { return Ticks; }
-	void incTicks() { Ticks++; }
 	void doSomething();
-	// bool requiresRandomization() const { return true; }
 };
 
 class Barrel : public DistGameObj {
-private:
-
 public:
 	Barrel(int startX, int startY) : DistGameObj(IMID_BARREL, startX, startY, right, 1.0, 2, alive)
 	{
@@ -118,7 +109,6 @@ public:
 	}
 
 	void doSomething();
-	//bool requiresRandomization() const { return true; }
 };
 
 // base class for DiggerMan/Protesters/HCProtesters
@@ -244,7 +234,6 @@ public:
 };
 
 class Dirt : public Actor {
-private:
 public:
 	Dirt(int startX, int startY)
 		: Actor(IMID_DIRT, startX, startY, right, .25, 3)
@@ -253,11 +242,9 @@ public:
 	}
 
 	virtual void doSomething() {};
-	//bool requiresRandomization() const { return false; }
 };
 
 class Squirt : public Person {
-private:
 public:
 	Squirt(int startX, int startY, Direction dir) :
 		Person(IMID_WATER_SPURT, startX, startY, dir, 1.0, 1, 0, alive) {
@@ -265,13 +252,9 @@ public:
 	}
 
 	virtual void doSomething();
-
 };
 
 class Sonar : public DistGameObj {
-private:
-	int Ticks;
-
 public:
 	Sonar(int startX, int startY);
 
@@ -285,7 +268,6 @@ public:
 };
 
 class WaterPool : public DistGameObj {
-
 public:
 	WaterPool(int startX, int startY);
 	void doSomething();
