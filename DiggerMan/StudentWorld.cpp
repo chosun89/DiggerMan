@@ -142,7 +142,7 @@ void StudentWorld::addBoulders()
 					break; // exit the for-loop, start from the top of while-loop
 				}
 
-				if (All[j]->isDistGameObj()) {
+				if (All[j]->requiresRandomization()) {
 					if (All[j]->checkDistance(x, y, 6.0))
 					{
 						j++;
@@ -183,7 +183,7 @@ void StudentWorld::addNuggets()
 				break;
 			}
 
-			if (All[j]->isDistGameObj()) {
+			if (All[j]->requiresRandomization()) {
 				if (All[j]->checkDistance(x, y, 6.0)) {
 					j++;
 					continue;
@@ -220,7 +220,7 @@ void StudentWorld::addBarrels()
 				break;
 			}
 
-			if (All[j]->isDistGameObj()) {
+			if (All[j]->requiresRandomization()) {
 				if (All[j]->checkDistance(x, y, 6.0)) {
 					j++;
 					continue;
@@ -447,7 +447,7 @@ void StudentWorld::sonarCheck() {
 	for (unsigned int i = 0; i < All.size(); i++)
 	{
 		
-		if (All[i]->isDistGameObj()
+		if (All[i]->requiresRandomization()
 														// reset sonarCheck radius to 12.0
 			&& !checkDistance(DM->getX(), DM->getY(), All[i]->getX(), All[i]->getY(), 12.0))
 

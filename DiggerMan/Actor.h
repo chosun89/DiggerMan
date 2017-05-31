@@ -47,7 +47,7 @@ public:
 
 	virtual void doSomething() = 0;
 
-	virtual bool isDistGameObj() const { return false; }
+	virtual bool requiresRandomization() const { return false; }
 
 private:
 
@@ -76,7 +76,7 @@ public:
 	void decTicks() { Ticks--; }
 	int getTicks() { return Ticks; }
 	void setTicks(int T) { Ticks = T; }
-	virtual bool isDistGameObj() const { return true; }
+	virtual bool requiresRandomization() const { return true; }
 
 };
 
@@ -90,7 +90,6 @@ public:
 	}
 
 	virtual void doSomething();
-	bool isDistGameObj() const { return true; }
 };
 
 class Nugget : public DistGameObj {
@@ -106,7 +105,7 @@ public:
 	int getTicks() { return Ticks; }
 	void incTicks() { Ticks++; }
 	void doSomething();
-	bool isDistGameObj() const { return true; }
+	// bool requiresRandomization() const { return true; }
 };
 
 class Barrel : public DistGameObj {
@@ -119,7 +118,7 @@ public:
 	}
 
 	void doSomething();
-	bool isDistGameObj() const { return true; }
+	//bool requiresRandomization() const { return true; }
 };
 
 // base class for DiggerMan/Protesters/HCProtesters
@@ -161,6 +160,7 @@ public:
 	void incHP(int k) {
 		HP += k;
 	}
+
 };
 
 class DiggerMan : public Person {
@@ -253,7 +253,7 @@ public:
 	}
 
 	virtual void doSomething() {};
-	bool isDistGameObj() const { return false; }
+	//bool requiresRandomization() const { return false; }
 };
 
 class Squirt : public Person {
