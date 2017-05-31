@@ -1,0 +1,85 @@
+1. The inheritance hierarchy splits all Actors into two parent classes, a Person class and a DistGameObj (distributed game object) class.
+Objects derived from Person are DiggerMan, and Protester and HCProtester (Hardcore Protester) inherits from Protester.
+
+2. Software: Visual Studio 2017 on Windows 10. 
+Hardware: Lenovo t450s ThinkPad, i5 IntelCore CPU, 8GB RAM.
+
+3. No c++11 features were used in this program...
+
+4. I wrote this program with one main paradigm--object-oriented programming. I wrote data members and methods that could be reused (inherited) by derived classes.
+In StudentWorld.cpp, functions were written that could be reused with any object derived from the Actor class to avoid code duplication (p. 23 of the manual). For example,
+I found that a few objects such as Nugget and OilBarrel would often need to know the location of DiggerMan each game tick so I wrote a method in their common base class 
+that would return true or false depending on whether or not DM was in their vicinity. I realized a little too late that only the StudentWorld should be "aware" of its 
+objects: 
+
+" Your	StudentWorld	methods	should	never	return	a	vector,	list	or	
+iterator	to	StudentWorld’s private game	objects or	pointers	to	those	
+objects. Only	StudentWorld should	know	about	all	of	its game	objects	
+and	where	they	are.	Instead, StudentWorld should	do	all	of	the	
+processing	itself if	an	action	needs	to	be	taken	on	one	or	more	game	
+objects	that	it	tracks."
+
+I had to rewrite my Actor.cpp class so that none of the objects could access public methods to other objects (eg. getDiggerMan()->getX()). It wasn't that bad and I
+wanted to adhere to stricter coding rules. 
+
+Variable and method that were invoked frequently had short and abbreviated names while methods that were called once or twice had descriptive names in favor of convenience.
+I tend to favor descirptive method names because memory works against me. I can't remember what everything does if it has a name that is too abbreviated.
+I also kept descriptive comments on top of each method I wrote which included conditions of the return type (if any) and a short description of its parameters (if any).
+eg. bool checkIfDirtorBoulder (int x, int y) // returns true if no dirt or boulder in coordinates , false if dirt or out of bounds
+eg2. void incSq() { DM->incSq(); } // increment current Squirt count
+eg3. void DiggerManBFS(); // globally updates array for shortest path to DM
+
+8. All features are implemented in adherence to the DiggerMan manual with the exception of the following: 
+1.) Protester movement towards DiggerMan in the its free-moving state. Instead of following the guidelines Protesters use BFS to find DM.
+2.) HCProtesters also use BFS to find and follow DiggerMan in its free-moving state. When HCProtesters are within a certain moveable distance M within DiggerMan,
+their TicksToMove threshold is set to 0, allowing them to move at the same speed as DM (fastest possible speed).
+
+Code testing was primarily done via VisualStudio 2017 debugger. This project would have been much more difficult without the debugger. Code breaks and line by line
+execution of code allowed to check for inconsistencies in logic. What really helped was being able to see the value of local variables as I would step-into code lines. 
+By observing the values of local variables I could check to see if they matched the expected values of said variables. Any discrepencies meant flaws in logic. What also
+helped was being able to cout or cerr to the console. I could print an entire array of nodes and their values by writing a nested for-loop and cout-ing to the console. 
+If the values did not match expected values this meant I had to look for more flaws in code logic. 
+
+Individual Write-up
+
+1. This is the code for Squirt object's doSomething() method:
+
+void Squirt::doSomething() {
+
+	if (getWorld()->squirtCollision(this)) {
+		setState(dead);
+	}
+
+	// move Squirt in the direction it is facing
+	if (getDirection() == left) {
+		moveTo(getX() - 1, getY());
+	}
+
+	else if (getDirection() == right) {
+		moveTo(getX() + 1, getY());
+	}
+
+	else if (getDirection() == up) {
+		moveTo(getX(), getY() + 1);
+	}
+
+	else if (getDirection() == down) {
+		moveTo(getX(), getY() - 1);
+	}
+
+
+}
+
+It looks similar to DiggerMan's doSomething() method. That's because they are similar! Both DiggerMan (or rather its base class Person) and Squirt both require a schema
+for movement. Even though Squirt may not have much in common with a Person in real life, in my program their abstractions make them common. Squirt updates its position 
+every game tick to its position plus +1 in the direction it is facing. Since they operate similarly I chose Squirt to inherit from the Person class.
+
+2. Debugging the breadth-first search algorithm for finding the shortest path. I first put path values (distances from the destination) for all positions that were not occupied
+by dirt or boulders. This meant that all empty spaces including ones to the left of a wall or dirt would have a path value. If this value happened to be the smallest of its 
+neighbors, the Protester would move there and then get stuck inside a wall/dirt/boulder. At first I tried backtracking. Keep track of the shortest path using a stack. If its current
+position is within dirt or a boulder, then pop that position from the stack, backtrack and try again. This bugfix was ineffective, led to more bugs and caused more headaches. 
+Instead I decided that there should be no path values for a coordinate if it cannot be traversed legally (the coordinate cannot allow the Protester to be inside a 
+wall/boulder/dirt). So I wrote a method that would check if it could be possible for a Protester to move into that position before-hand: bool canMove(Proteseter*). This changed the
+shortest path to be only one path of values instead of multiple. I wrote a debugging function to print out the path values of all Nodes in my 2D array of Nodes. It made it
+easier to see the actual path values and see if my proposed solution worked or not and it did.
+
